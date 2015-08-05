@@ -23,23 +23,22 @@ MPULib::MPULib()
 
 void MPULib::init(){
 Wire.begin(); 
-//init - ADXL345
-writeCmd(ADXL_addr,ACCEL_CONFIG,0x18); //+-16g SET THE G RANGE (DOUBLE CHECK)
-writeCmd(ADXL_addr,PWR_MGMT_1, "");  //TODO: choose cycle mode
-writeCmd(ADXL_addr,PWR_MGMT_2, "");  //TODO: REG_BW_RATE rate=50hz, bw=20hz
-//1G = 265
-//-----end init ADXL345
+//init - Accel part
+writeCmd(MPU_addr,ACCEL_CONFIG,0x18); //+-16g SET THE G RANGE
+writeCmd(MPU_addr,PWR_MGMT_1, 0x2B);  //choose cycle mode + clock
+writeCmd(MPU_addr,PWR_MGMT_2, 0xC0); // wake up frequency 20hz
+writeCmd(MPU_addr,CONFIG, 0x04); //bandwidth 21hz delay 8.5hz chosen
+//-----end init Accel
 
-//init - L3G4200D
-writeCmd(L3G4_addr,CTRL_REG1,L3G4_BW_ENAX);
-writeCmd(L3G4_addr,CTRL_REG2,L3G4_LPF);
-writeCmd(L3G4_addr,CTRL_REG4,MODE_2000);
-writeCmd(L3G4_addr,CTRL_REG5,L3G4_HPF);
-//-----end init L3G4200D
+//init - Gyro part
 
-//init - HMC5883 ! we don't have a magnetoscope
+writeCmd(MPU_addr,CTRL_REG4, 0xF8); //set to 2000dps
+
+//-----end init Gyro
+
+// we don't have a magnetoscope
 // writeCmd(HMC_addr,HMC_mode_reg,HMC_contm_val);
-//-----end init HMC5883
+//
 }
 
 void MPULib::getAxlData(int buff[]){

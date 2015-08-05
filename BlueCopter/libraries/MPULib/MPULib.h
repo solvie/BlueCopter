@@ -18,13 +18,12 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-// <---------ADXL345->MPU6050-------------->
-#define ADXL_addr 0x68  //addr-pin LOW //TODO, modify name so it's more relevant
-
+// <---------Accelerometer config-------------->
+#define MPU_addr 0x68  //addr-pin LOW
 #define ACCEL_CONFIG 0x1C // -- changing this value determines whether its +-2, 4, 8, or 16g. we want 16g.
 #define PWR_MGMT_1 0x6B // put this in cycle mode
-#define PWR_MGMT_2  0x6C // -- changing this value should delay the start of the activity function or auto sleep or put it in standby mode or measurement mode.  (that last bit is the most important) -- use this to determine the wake frequency
-#define REG_BW_RATE	0x2C //TODO: -- changing the value inside will put in in a high or low power setting, and or select the device bandwidth and output data rate. ----- select the device bandwidth.
+#define PWR_MGMT_2  0x6C // -- standby mode or measurement mode, determine the wake frequency
+#define CONFIG	0x1A // high or low power setting, and or select the device bandwidth and output data rate. ----- select the device bandwidth.
 
 #define DATAX0  0x3C  //LSB
 #define DATAX1  0x3B  //MSB
@@ -34,23 +33,10 @@
 #define DATAZ1  0x41  //MSB
 // <-------------------------------->
 
-// <---------L3G4200D->MPU6050-------------->
+// <---------Gyroscope config-------------->
 
-#define L3G4_addr 0x68  //SDO-pin HIGH
-// TODO
-#define CTRL_REG1  0x20
-#define CTRL_REG2	0x21
-#define CTRL_REG4  0x23
-#define CTRL_REG5 0x24
-#define L3G4_HPF	0x13
-#define L3G4_LPF	0x34
-#define L3G4_BW_ENAX	0x8F
-#define MODE_250  0x00
-#define MODE_500  ((0x01)<<4) 
-#define MODE_2000 ((0x03)<<4) 
-#define SCALE_250  (8.75/1000.0)
-#define SCALE_500  (17.5/1000.0)
-#define SCALE_2000  (70.0/1000.0)
+#define CTRL_REG4  0x1B
+
 //--
 
 #define READALLSIX  0x43 | (1 << 7)
@@ -61,6 +47,7 @@
 #define OUT_Z_L  0x48
 #define OUT_Z_H  0x47
 // <-------------------------------->
+
 /*
 // <---------HMC5883-------------->
 #define HMC_addr	0x1E
