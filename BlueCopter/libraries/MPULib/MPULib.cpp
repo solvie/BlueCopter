@@ -24,9 +24,9 @@ MPULib::MPULib()
 void MPULib::init(){
 Wire.begin(); 
 //init - ADXL345
-writeCmd(ADXL_addr,REG_DATA_FORMAT,0x0B); //+-16g
-writeCmd(ADXL_addr,REG_PWR_CTL,0x08);  //measurement mode
-writeCmd(ADXL_addr,REG_BW_RATE,0x09);  //REG_BW_RATE rate=50hz, bw=20hz
+writeCmd(ADXL_addr,ACCEL_CONFIG,0x18); //+-16g SET THE G RANGE (DOUBLE CHECK)
+writeCmd(ADXL_addr,PWR_MGMT_1, "");  //TODO: choose cycle mode
+writeCmd(ADXL_addr,PWR_MGMT_2, "");  //TODO: REG_BW_RATE rate=50hz, bw=20hz
 //1G = 265
 //-----end init ADXL345
 
@@ -37,8 +37,8 @@ writeCmd(L3G4_addr,CTRL_REG4,MODE_2000);
 writeCmd(L3G4_addr,CTRL_REG5,L3G4_HPF);
 //-----end init L3G4200D
 
-//init - HMC5883
-writeCmd(HMC_addr,HMC_mode_reg,HMC_contm_val);
+//init - HMC5883 ! we don't have a magnetoscope
+// writeCmd(HMC_addr,HMC_mode_reg,HMC_contm_val);
 //-----end init HMC5883
 }
 
@@ -58,14 +58,14 @@ buff[0]=(float)((int)(buffer[1]<<8) | buffer[0])*SCALE_2000;
 buff[1]=(float)((int)(buffer[3]<<8) | buffer[2])*SCALE_2000;
 buff[2]=(float)((int)(buffer[5]<<8) | buffer[4])*SCALE_2000;
 }
-
+/*
 void MPULib::getMagData(int buff[]){
 byte buffer[6];
 readCmd(HMC_addr,HMC_X_MSB,6,buffer);
 buff[0]=(buffer[0]<<8) | buffer[1];
 buff[2]=(buffer[2]<<8) | buffer[3];
 buff[1]=(buffer[4]<<8) | buffer[5];
-}
+}*/
 
 void MPULib::readCmd(byte addr,byte reg,byte num,byte buff[]){
   Wire.beginTransmission(addr);
